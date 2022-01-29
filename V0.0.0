@@ -1,0 +1,98 @@
+@echo off
+:checkf
+if not exist Mem.rdos goto makef
+< Mem.rdos (
+set /p 1e=
+set /p 2e=
+set /p 3e=
+set /p 4e=
+set /p 5e=
+)
+set /a e1=%1e%
+set /a e2=%2e%
+set /a e3=%3e%
+set /a e4=%4e%
+set /a e5=%5e%
+goto game
+:makef
+(
+echo 0
+echo 0
+echo 0
+echo 0
+echo 0
+echo 0
+)>Mem.rdos
+goto checkf
+
+:game
+cls
+Title RPG-DOS Prototype
+echo RPG-DOS
+echo.
+echo 1) Wander Pixelnir
+set /p choice=
+if %choice% equ 1 goto wander
+if %choice% equ %choice% goto game
+
+:wander
+cls
+set /a monsters=%random% %%10+1
+if %monsters% geq 9 goto fight1
+echo No monsters around here...
+echo.
+echo 1) Wander more?
+echo 2) Leave
+set /p wanderc=
+if %wanderc% equ 1 goto wander
+if %wanderc% equ 2 goto game
+if %wanderc% equ %wanderc% goto wander
+
+:fight1
+set /a mhp=100
+set /a php=100
+goto fight2
+
+:fight2
+cls
+set /a ranm=%random% %%20+1
+set /a ranp=%random% %%20+1
+echo Unknown Monster
+echo HP: %mhp%
+echo Adventurer %USERNAME%
+echo HP: %php%
+pause
+echo.
+echo You attacked and deal %ranp% damage
+set /a mhp=%mhp%-%ranp%
+pause
+echo.
+echo %mname% attacked and deals %ranm% damage
+set /a php=%php%-%ranm%
+pause
+if %php% leq 0 goto lose
+if %mhp% leq 0 goto win
+goto fight2
+
+:lose
+cls
+echo Oh no
+echo You lose the fight
+pause
+goto game
+
+:win
+cls
+set /a points=%random% %%3+1
+set /a exp=%points%+%exp%
+(
+echo %e1%
+echo %e2%
+echo %e3%
+echo %e4%
+echo %e5%
+)> mem.rdos
+echo Lets goo
+echo You won the fight
+pause
+goto wander
