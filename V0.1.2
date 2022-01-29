@@ -1,0 +1,538 @@
+@echo off
+color 0a
+:checkf
+if not exist Mem_v0.1.rdos goto makef
+< Mem_v0.1.rdos (
+set /p l=
+set /p ee=
+set /p c=
+set /p f=
+set /p p=
+set /p p2=
+set /p re=
+set /p sdpck=
+set /p lvs=
+)
+set /a fexp=%l%
+set /a eexp=%ee%
+set /a coins=%c%
+set /a farm=%f%
+set /a level=%p%
+set /a phpp=%p2%
+set /a reqexp=%re%
+set /a seedpack=%sdpck%
+set /a lives=%lvs%
+goto intro
+:makef
+(
+echo 0
+echo 0
+echo 10
+echo 0
+echo 1
+echo 0
+echo 500
+echo 10
+echo 50
+)>Mem_v0.1.rdos
+goto checkf
+
+:intro
+if %lives% equ 0 (
+del Mem_v0.1.rdos
+echo Oh no
+echo You have 0 lives!
+echo Your progress has been deleted
+pause
+goto checkf
+)
+cls
+Title RPG-DOS Game - v0.1
+goto game
+
+:game
+cls
+echo RPG-DOS
+echo.
+echo 1) Wander Pixelandia
+echo 2) Stats
+echo 3) Store
+echo 4) Farming
+echo 5) Quests
+set /p choice=
+if %choice% equ 1 goto wander
+if %choice% equ 2 goto stats
+if %choice% equ 3 goto store1
+if %choice% equ 4 goto farm
+if %choice% equ 5 goto quests
+if /i "%choice%" == "hrdos" start chrome.exe https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=1s
+if %choice% equ %choice% goto game
+
+:quests
+cls
+set q1=Incomplete
+set q2=Incomplete
+set q3=Incomplete
+set q3a=Incomplete
+set q4=Incomplete
+set q5=Incomplete
+set q6=Incomplete
+set q7=Incomplete
+set q8=Incomplete
+set q9=Incomplete
+set q10=Incomplete
+set q11=Incomplete
+set q12=Incomplete
+if %fexp% geq 500 set q1=Complete
+if %fexp% geq 1000 set q2=Complete
+if %fexp% geq 1500 set q3=Complete
+if %fexp% geq 2000 set q3a=Complete
+if %eexp% geq 500 set q4=Complete
+if %eexp% geq 1500 set q5=Complete
+if %eexp% geq 2500 set q6=Complete
+if %level% geq 5 set q7=Complete
+if %level% geq 10 set q8=Complete
+if %level% geq 20 set q9=Complete
+if %level% geq 50 set q10=Complete
+if %level% geq 75 set q11=Complete
+if %level% geq 100 set q12=Complete
+echo Quest hall
+echo.
+echo Fighting EXP
+echo.
+echo 1) 500 Fighting EXP
+echo Status: %q1%
+echo.
+echo 2) 1000 Fighting EXP
+echo Status: %q2%
+echo.
+echo 3) 1500 Fighting EXP
+echo Status: %q3%
+echo.
+echo 4) 2000 Fighting EXP
+echo Status: %q3a%
+pause
+cls
+echo Wandering EXP
+echo.
+echo 1) 500 Wandering EXP
+echo Status: %q4%
+echo.
+echo 2) 1500 Wandering EXP
+echo Status: %q5%
+echo.
+echo 3) 2500 Wandering EXP
+echo Status: %q6%
+pause
+cls
+echo Level
+echo.
+echo 1) Get Level: 5
+echo Status: %q7%
+echo.
+echo 2) Get Level: 10
+echo Status: %q8%
+echo.
+echo 3) Get Level: 20
+echo Status: %q9%
+echo.
+echo 4) Get Level: 50
+echo Status: %q10%
+echo.
+echo 5) Get Level: 75
+echo Status: %q11%
+echo.
+echo 6) Get Level: 100
+echo Status: %q12%
+pause
+goto game
+
+:store1
+if %fexp% lss %reqexp% (
+echo You don't have enough fighting EXP to access store
+echo Required EXP: %reqexp%
+pause
+goto game
+)
+
+:store2
+cls
+echo Coins %coins%
+echo.
+echo.
+echo.
+echo 1) leave
+echo.
+echo 2) Buy level
+echo - Increases the Difficulty of the game (It won't Decrease)
+echo - Level %level%
+echo - Price 500 coins
+echo.
+echo 3) Buy health
+echo - Represents on how long you will die
+echo - Added HP %phpp%
+echo - Price 500 coins
+echo.
+echo 4) Buy lives
+echo - decreases when you lose (Don't waste them if you ran out of it you'll lose progress)
+echo - Lives %lives%
+echo - Price 450
+echo.
+echo 5) Buy Seed pack
+echo - 1 plant = more money.
+echo - Seed packs %seedpack%
+echo - Price 100
+echo.
+set /p choicebuy=
+if %choicebuy% equ 1 goto game
+if %choicebuy% equ 2 goto addlvl
+if %choicebuy% equ 3 goto addhp
+if %choicebuy% equ 4 goto addlives
+if %choicebuy% equ 5 goto addseedp
+if %choicebuy% equ %choicebuy% goto store
+
+:addseedp
+set /a reqexp=%reqexp%+500
+if %coins% lss 100 goto store1
+set /a coins=%coins%-500
+set /a seedpack=%seedpack%+1
+(
+echo %fexp%
+echo %eexp%
+echo %coins%
+echo %farm%
+echo %level%
+echo %phpp%
+echo %reqexp%
+echo %seedpack%
+echo %lives%
+)> Mem_v0.1.rdos
+echo You have brought a seed pack
+pause
+goto store1
+
+:addlives
+set /a reqexp=%reqexp%+500
+if %coins% lss 450 goto store1
+set /a coins=%coins%-500
+set /a lives=%lives%+1
+(
+echo %fexp%
+echo %eexp%
+echo %coins%
+echo %farm%
+echo %level%
+echo %phpp%
+echo %reqexp%
+echo %seedpack%
+echo %lives%
+)> Mem_v0.1.rdos
+echo You have brought a additional life
+pause
+goto store1
+
+:addhp
+if %coins% lss 500 goto store1
+set /a reqexp=%reqexp%+500
+set /a phpp=%phpp%+25
+set /a coins=%coins%-500
+(
+echo %fexp%
+echo %eexp%
+echo %coins%
+echo %farm%
+echo %level%
+echo %phpp%
+echo %reqexp%
+echo %seedpack%
+echo %lives%
+)> Mem_v0.1.rdos
+echo You have brought a health point
+pause
+goto store1
+
+:addlvl
+if %coins% lss 500 goto store1
+set /a reqexp=%reqexp%+500
+set /a level=%level%+1
+set /a coins=%coins%-500
+(
+echo %fexp%
+echo %eexp%
+echo %coins%
+echo %farm%
+echo %level%
+echo %phpp%
+echo %reqexp%
+echo %seedpack%
+echo %lives%
+)> Mem_v0.1.rdos
+echo You have brought a level
+pause
+goto store1
+
+:farm
+cls
+echo %farm% farmed plants
+echo gained %coins% coins
+echo.
+echo.
+echo 1) farm
+echo 2) sell
+echo 3) leave
+set /p choicefarm=
+if %choicefarm% equ 1 (
+if %seedpack% leq 0 goto farm
+set /a seedpack=%seedpack%-1
+set /a farm=%farm%+1
+(
+echo %fexp%
+echo %eexp%
+echo %coins%
+echo %farm%
+echo %level%
+echo %phpp%
+echo %reqexp%
+echo %seedpack%
+echo %lives%
+)> Mem_v0.1.rdos
+echo You planted a plant!
+pause
+goto farm
+)
+if %choicefarm% equ 2 (
+if %farm% leq 0 goto farm
+set /a farm=%farm%-1
+set /a rancoin=%random% %%10+1
+set /a coins=%coins%+%rancoin%
+(
+echo %fexp%
+echo %eexp%
+echo %coins%
+echo %farm%
+echo %level%
+echo %phpp%
+echo %reqexp%
+echo %seedpack%
+echo %lives%
+)> Mem_v0.1.rdos
+echo You got %rancoin% coins
+goto farm
+)
+if %choicefarm% equ 3 goto game
+if %choicefarm% equ %choicefarm% goto farm
+pause
+goto farm
+
+:wander
+if %lives% equ 0 (
+del Mem_v0.1.rdos
+echo Oh no
+echo You have 0 lives!
+echo Your progress is been deleted
+pause
+goto checkf
+)
+cls
+set /a monsters=%random% %%30+1
+if %monsters% geq 15 goto fight1
+echo No monsters around here...
+echo.
+echo 1) Wander more?
+echo 2) Never mind
+set /p wanderc=
+if %wanderc% equ 1 (
+set /a ranee=%random% %%3+1
+set /a eexp=%ranee%+%eexp%
+(
+echo %fexp%
+echo %eexp%
+echo %coins%
+echo %farm%
+echo %level%
+echo %phpp%
+echo %reqexp%
+echo %seedpack%
+echo %lives%
+)> Mem_v0.1.rdos
+)
+if %wanderc% equ 2 goto game
+if %wanderc% equ %wanderc% goto wander
+
+:fight1
+set /a php=100+%phpp%
+set /a addhealth=%random% %%50+1
+set /a randname=%random% %%11+1
+
+if %randname% equ 1 (
+set mname=Human
+set /a mhp=100+%addhealth%*%level%
+set /a php=100+%phpp%
+goto fight2
+)
+
+if %randname% equ 2 (
+set mname=Goblin
+set /a mhp=75+%addhealth%*%level%
+goto fight2
+)
+
+if %randname% equ 3 (
+set mname=Giant
+set /a mhp=110+%addhealth%*%level%
+goto fight2
+)
+
+if %randname% equ 4 (
+set mname=Bear
+set /a mhp=115+%addhealth%*%level%
+goto fight2
+)
+
+if %randname% equ 5 (
+set mname=Rat
+set /a mhp=50+%addhealth%*%level%
+goto fight2
+)
+
+if %randname% equ 6 (
+set mname=Dwarf
+set /a mhp=75+%addhealth%*%level%
+goto fight2
+)
+
+if %randname% equ 7 (
+set mname=Robot
+set /a mhp=100+%addhealth%*%level%
+goto fight2
+)
+
+if %randname% equ 8 (
+set mname=Small Dragon
+set /a mhp=110+%addhealth%*%level%
+goto fight2
+)
+
+if %randname% equ 9 (
+set mname=Ghost
+set /a mhp=25+%addhealth%*%level%
+goto fight2
+)
+
+if %randname% equ 10 (
+set mname=Dragon
+set /a mhp=120+%addhealth%*%level%
+goto fight2
+)
+
+if %randname% equ 11 (
+set mname=Taratata
+set /a mhp=150+%addhealth%*%level%
+goto fight2
+)
+
+
+:fight2
+if %mhp% leq 0 goto fight1
+cls
+set /a ranm=%random% %%20+1
+set /a ranp=%random% %%20+1
+echo %mname%
+echo HP: %mhp%
+echo Adventurer %USERNAME%
+echo HP: %php%
+pause
+echo.
+echo You attacked and deal %ranp% damage
+set /a mhp=%mhp%-%ranp%-%level%
+echo.
+echo 1. fight
+echo 2. flee
+set /p choicew=
+if %choicew% equ 1 goto fight3
+if %choicew% equ 2 goto game
+if %choicew% equ %choicew% goto fight2
+
+:fight3
+echo.
+echo %mname% attacked and deals %ranm% damage
+set /a php=%php%-%ranm%
+pause
+if %php% leq 0 goto lose
+if %mhp% leq 0 goto win
+goto fight2
+
+:lose
+cls
+echo Oh no
+echo You lose the fight
+set /a lives=%lives%-1
+(
+echo %fexp%
+echo %eexp%
+echo %coins%
+echo %farm%
+echo %level%
+echo %phpp%
+echo %reqexp%
+echo %seedpack%
+echo %lives%
+)> Mem_v0.1.rdos
+pause
+goto game
+
+:win
+cls
+set /a points=%random% %%3+1
+set /a fexp=%points%+%fexp%+%addhealth%
+(
+echo %fexp%
+echo %eexp%
+echo %coins%
+echo %farm%
+echo %level%
+echo %phpp%
+echo %reqexp%
+echo %seedpack%
+echo %lives%
+)> Mem_v0.1.rdos
+echo Lets goo
+echo You won the fight
+pause
+goto wander
+
+:stats
+< Mem_v0.1.rdos (
+set /p l=
+set /p ee=
+set /p c=
+set /p f=
+set /p p=
+set /p p2=
+set /p re=
+set /p sdpck=
+set /p lvs=
+)
+set /a fexp=%l%
+set /a eexp=%ee%
+set /a coins=%c%
+set /a farm=%f%
+set /a level=%p%
+set /a phpp=%p2%
+set /a reqexp=%re%
+set /a seedpack=%sdpck%
+set /a lives=%lvs%
+set /a texp=%fexp%+%eexp%
+cls
+echo Adventurer %USERNAME%
+echo Fight EXP: %fexp%
+echo Wandering EXP: %eexp%
+echo Total EXP: %texp%
+echo Coins: %coins%
+echo Farmed Plants: %farm%
+echo level:%level%
+echo Seed pack:%seedpack%
+echo Lives:%lives%
+echo.
+pause
+goto game
